@@ -22,7 +22,7 @@ abstract class FluffyThemes {
 
   static const fallbackTextStyle = TextStyle(
     fontFamily: 'Roboto',
-    fontFamilyFallback: ['NotoEmoji'],
+    fontFamilyFallback: [AppConfig.emojiFontName],
   );
 
   static var fallbackTextTheme = const TextTheme(

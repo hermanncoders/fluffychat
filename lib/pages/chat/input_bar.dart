@@ -8,6 +8,7 @@ import 'package:matrix/matrix.dart';
 import 'package:slugify/slugify.dart';
 
 import 'package:fluffychat/config/app_config.dart';
+import 'package:fluffychat/pages/settings_emotes/settings_emotes.dart';
 import 'package:fluffychat/utils/platform_infos.dart';
 import 'package:fluffychat/widgets/mxc_image.dart';
 import '../../widgets/avatar.dart';
@@ -44,7 +45,10 @@ class InputBar extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  List<Map<String, String?>> getSuggestions(String text) {
+  List<Map<String, String?>> getSuggestions(
+    String text, {
+    fitzpatrick tone = fitzpatrick.None,
+  }) {
     if (controller!.selection.baseOffset !=
             controller!.selection.extentOffset ||
         controller!.selection.baseOffset < 0) {
@@ -116,12 +120,28 @@ class InputBar extends StatelessWidget {
         }
       }
       // aside of emote packs, also propose normal (tm) unicode emojis
-      final matchingUnicodeEmojis = Emoji.all()
-          .where(
-            (element) => [element.name, ...element.keywords]
-                .any((element) => element.toLowerCase().contains(emoteSearch)),
-          )
-          .toList();
+
+      final matchingUnicodeEmojis = List.from(
+        Emoji.all()
+            // filter out duplicate skins in order to reduce the list length
+            .where(
+          (element) => [
+            element.name,
+            ...element.keywords,
+          ].any(
+            (element) => element.toLowerCase().contains(emoteSearch),
+          ),
+        )
+            // shorten the list by reducing redundant skin tones
+            .map((e) {
+          try {
+            // TODO: find a way to filter out different hair colors
+            return e.newSkin(tone);
+          } catch (_) {
+            return e;
+          }
+        }).toSet(),
+      );
       // sort by the index of the search term in the name in order to have
       // best matches first
       // (thanks for the hint by github.com/nextcloud/circles devs)
@@ -394,6 +414,7 @@ class InputBar extends StatelessWidget {
     final useShortCuts = (PlatformInfos.isWeb ||
         PlatformInfos.isDesktop ||
         AppConfig.sendOnEnter);
+    final tone = Matrix.of(context).client.defaultEmojiTone;
     return Shortcuts(
       shortcuts: !useShortCuts
           ? {}
@@ -456,7 +477,7 @@ class InputBar extends StatelessWidget {
             },
             textCapitalization: TextCapitalization.sentences,
           ),
-          suggestionsCallback: getSuggestions,
+          suggestionsCallback: (q) => getSuggestions(q, tone: tone),
           itemBuilder: (c, s) =>
               buildSuggestion(c, s, Matrix.of(context).client),
           onSuggestionSelected: (Map<String, String?> suggestion) =>

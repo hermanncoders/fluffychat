@@ -125,6 +125,8 @@ class _Reaction extends StatelessWidget {
             uri: Uri.parse(reactionKey!),
             width: 9999,
             height: fontSize,
+            watermarkColor: color,
+            watermarkSize: (fontSize ?? 12) / 1.5,
           ),
           const SizedBox(width: 4),
           Text(

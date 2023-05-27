@@ -423,7 +423,7 @@ class ChatController extends State<ChatPageWithRoom> {
 
     // ignore: unawaited_futures
     room.sendTextEvent(
-      sendController.text,
+      sendController.text.trim(),
       inReplyTo: replyEvent,
       editEventId: editEvent?.eventId,
       parseCommands: parseCommands,

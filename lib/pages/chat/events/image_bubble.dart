@@ -14,13 +14,14 @@ class ImageBubble extends StatelessWidget {
   final bool maxSize;
   final Color? backgroundColor;
   final bool thumbnailOnly;
-  final bool animated;
   final double width;
   final double height;
   final void Function()? onTap;
+  final Color? watermarkColor;
 
   const ImageBubble(
     this.event, {
+    Key? key,
     this.tapToView = true,
     this.maxSize = true,
     this.backgroundColor,
@@ -28,9 +29,8 @@ class ImageBubble extends StatelessWidget {
     this.thumbnailOnly = true,
     this.width = 400,
     this.height = 300,
-    this.animated = false,
     this.onTap,
-    Key? key,
+    this.watermarkColor,
   }) : super(key: key);
 
   Widget _buildPlaceholder(BuildContext context) {
@@ -94,13 +94,16 @@ class ImageBubble extends StatelessWidget {
                   )
                 : null,
             child: MxcImage(
+              key: ValueKey(event.eventId),
               event: event,
               width: width,
               height: height,
               fit: fit,
-              animated: animated,
+              disableTapHandler: true,
               isThumbnail: thumbnailOnly,
               placeholder: _buildPlaceholder,
+              watermarkSize: width / 2.5,
+              watermarkColor: watermarkColor,
             ),
           ),
         ),

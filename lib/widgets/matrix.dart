@@ -22,6 +22,7 @@ import 'package:universal_html/html.dart' as html;
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:vrouter/vrouter.dart';
 
+import 'package:fluffychat/pages/settings_chat/settings_chat.dart';
 import 'package:fluffychat/utils/client_manager.dart';
 import 'package:fluffychat/utils/localized_exception_extension.dart';
 import 'package:fluffychat/utils/platform_infos.dart';
@@ -486,9 +487,12 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
     store
         .getItemBool(SettingKeys.separateChatTypes, AppConfig.separateChatTypes)
         .then((value) => AppConfig.separateChatTypes = value);
-    store
-        .getItemBool(SettingKeys.autoplayImages, AppConfig.autoplayImages)
-        .then((value) => AppConfig.autoplayImages = value);
+    store.getItemBool(SettingKeys.autoplayImages).then((value) async {
+      if (value != client.autoplayAnimatedContent) {
+        await client.setAutoplayAnimatedContent(value);
+      }
+      await store.deleteItem(SettingKeys.autoplayImages);
+    });
     store
         .getItemBool(SettingKeys.sendOnEnter, AppConfig.sendOnEnter)
         .then((value) => AppConfig.sendOnEnter = value);

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gen/gen_l10n/l10n.dart';
-import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:matrix/matrix.dart';
 import 'package:vrouter/vrouter.dart';
 
@@ -10,12 +9,12 @@ import 'package:fluffychat/pages/chat_details/chat_details.dart';
 import 'package:fluffychat/pages/chat_details/participant_list_item.dart';
 import 'package:fluffychat/utils/fluffy_share.dart';
 import 'package:fluffychat/utils/matrix_sdk_extensions/matrix_locals.dart';
+import 'package:fluffychat/widgets/animated_emoji_plain_text.dart';
 import 'package:fluffychat/widgets/avatar.dart';
 import 'package:fluffychat/widgets/chat_settings_popup_menu.dart';
 import 'package:fluffychat/widgets/content_banner.dart';
 import 'package:fluffychat/widgets/layouts/max_width_body.dart';
 import 'package:fluffychat/widgets/matrix.dart';
-import '../../utils/url_launcher.dart';
 
 class ChatDetailsView extends StatelessWidget {
   final ChatDetailsController controller;
@@ -125,26 +124,15 @@ class ChatDetailsView extends StatelessWidget {
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 16.0,
                               ),
-                              child: Linkify(
-                                text: room.topic.isEmpty
+                              child: TextLinkifyEmojify(
+                                room.topic.isEmpty
                                     ? L10n.of(context)!.addGroupDescription
                                     : room.topic,
-                                options: const LinkifyOptions(humanize: false),
-                                linkStyle:
-                                    const TextStyle(color: Colors.blueAccent),
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium!
-                                      .color,
-                                  decorationColor: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium!
-                                      .color,
-                                ),
-                                onOpen: (url) =>
-                                    UrlLauncher(context, url.url).launchUrl(),
+                                fontSize: 14,
+                                textColor: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .color!,
                               ),
                             ),
                           const SizedBox(height: 8),

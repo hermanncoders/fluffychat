@@ -66,6 +66,8 @@ class Avatar extends StatelessWidget {
                 height: size,
                 placeholder: (_) => textWidget,
                 cacheKey: mxContent.toString(),
+                watermarkSize: fontSize,
+                watermarkColor: Colors.white,
               ),
       ),
     );
