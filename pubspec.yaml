@@ -146,11 +146,6 @@ flutter:
     - family: Noto Color Emoji
       fonts:
         - asset: fonts/NotoEmoji/NotoColorEmoji.ttf
-    - family: Noto Color Emoji Compat
-      fonts:
-        # This file is gathered from https://mvnrepository.com/artifact/androidx.emoji/emoji-bundled/
-        # Was a hazzle to find it.
-        - asset: fonts/NotoColorEmojiCompat.ttf
     - family: Noto Sans Symbols
       fonts:
         - asset: fonts/NotoSansSymbols-VariableFont_wght.ttf
