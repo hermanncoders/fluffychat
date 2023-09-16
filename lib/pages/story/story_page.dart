@@ -109,12 +109,18 @@ class StoryPageController extends State<StoryPage> {
   List<User> get currentSeenByUsers {
     final timeline = this.timeline;
     final currentEvent = this.currentEvent;
+    List<User>? seenByUsers = [];
     if (timeline == null || currentEvent == null) return [];
-    return Matrix.of(context).client.getRoomById(roomId)?.getSeenByUsers(
-              timeline,
-              eventId: currentEvent.eventId,
-            ) ??
-        [];
+    seenByUsers = Matrix.of(context)
+        .client
+        .getRoomById(roomId)
+        ?.getSeenByUsers(
+          timeline,
+          eventId: currentEvent.eventId,
+        )
+        .map((r) => r.user)
+        .toList();
+    return seenByUsers ?? [];
   }
 
   void share() async {
